@@ -7,3 +7,6 @@ class Vehicle:
         self.tankCapacity_Gall = 200
         self.initialFuel_Gall = 100
         self.requiredFuelAtDest_Gall = 100
+        
+        self.acumulatePrice = 0
+        self.currentFuel = self.initialFuel_Gall
