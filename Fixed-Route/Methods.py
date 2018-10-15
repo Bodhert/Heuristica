@@ -1,4 +1,5 @@
 # refueling_nodes =[]
+from Vehicle import Vehicle
 
 def checkConditions(vehicle,currentNode, nextNode):
     tempVehicle = vehicle
@@ -7,6 +8,13 @@ def checkConditions(vehicle,currentNode, nextNode):
         currentFuel_gal = tempVehicle.currentFuel - ((milesTotravel**-1) *  tempVehicle.milesPerGallon )**-1 # converting unities
         return currentFuel_gal >= tempVehicle.minfuelAnyTime_Gall
     return True
+
+def checkIfFeasibleNeighborhood(List_Neigboorhood, vehicle):
+    ofRoadRouteAcum = 0
+    for node in List_Neigboorhood:
+        ofRoadRouteAcum = ofRoadRouteAcum + node.oor
+    
+    return ofRoadRouteAcum <= vehicle.maxOutRoute 
 
 def advance(vehicle,currentNode, nextNode):
     if currentNode.cumMile != nextNode.cumMile: # have to think well this question
