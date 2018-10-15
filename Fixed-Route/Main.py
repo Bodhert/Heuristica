@@ -13,7 +13,7 @@ def main():
     
     #first method
     start = time.time()
-    ConstructiveAlgorithm(d, v, 1, 30)
+    List_of_solutions_with_ConstructiveAlgorithm(d, v, 1, 30)
     end = time.time()
     print("elapsed time " + str( end - start))
     print()
