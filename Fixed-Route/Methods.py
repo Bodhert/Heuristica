@@ -44,8 +44,8 @@ def List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd):
                 advance(vehicle, currentNode, nextNode)
             else:
                 print("No Solution know :( sorry")
-    print("constructive algorithm")
-    print (vehicle.acumulatePrice)
+#     print("constructive algorithm")
+#     print (vehicle.acumulatePrice)
     return refueling_nodes
 
 def do_the_route_charging_at_fithyPercent(List_of_charging_points, vehicle):
@@ -55,8 +55,9 @@ def do_the_route_charging_at_fithyPercent(List_of_charging_points, vehicle):
 def fuel_at_fithy_percent(node, vehicle):
     midCharge = vehicle.tankCapacity_Gall - vehicle.minfuelAnyTime_Gall
     to_refuel = midCharge - vehicle.currentFuel 
-    vehicle.acumulatePrice =  vehicle.acumulatePrice + (to_refuel*node.price)
-    vehicle.currentFuel = vehicle.currentFuel + to_refuel
+    if to_refuel > 0:
+        vehicle.acumulatePrice =  vehicle.acumulatePrice + (to_refuel*node.price)
+        vehicle.currentFuel = vehicle.currentFuel + to_refuel
     
 
 def NoiseAndConstruc(data,vehicle, idStart, idEnd):
