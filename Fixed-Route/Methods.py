@@ -66,7 +66,7 @@ def NoiseAndConstruc(data,vehicle, idStart, idEnd):
     List_of_solutions_with_ConstructiveAlgorithm(NoisedData,vehicle, idStart, idEnd)
 
 def make_move_on_a_neighborhood(initial_neighborhood, data):
-    if len(initial_neighborhood) != 0:
+    if len(initial_neighborhood) > 0:
         next_neighborhood = []
         for node in initial_neighborhood:
             if node.stopId >= 5:
@@ -76,7 +76,29 @@ def make_move_on_a_neighborhood(initial_neighborhood, data):
     else:
         print("sorry no empty list allowed")
             
-        
 
+def make_move_on_a_neighborhood_adding_more_charging_points(list_inital_neighbohood, data):
+    newNeigbor = list_inital_neighbohood[:]
+    size = len(list_inital_neighbohood)
+    for i in range(size):
+        currentNode = list_inital_neighbohood[i]
+        nextToInsert = data.route[currentNode.stopId]
+        if i != size-1:
+            newNeigbor.insert(i+1,nextToInsert)
+        else:
+            newNeigbor.insert(i,nextToInsert)
+            
+    return newNeigbor
 
+def NoisyMethod(data,vehicle, idStart, idEnd):
+    data.generateNoise()
+    Best_Know_solution = List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd)
+    best_price = vehicle.acumulatePrice
+    for i in range(0,100):
+        data.generateNoise()
+        temp_solution = List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd)
+        if(vehicle.acumulatePrice < best_price):
+            Best_Know_solution = temp_solution
+            best_price = vehicle.acumulatePrice 
+    vehicle.acumulatePrice = best_price
     
