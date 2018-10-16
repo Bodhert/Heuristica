@@ -15,7 +15,16 @@ class Data:
             tempNode.cumMile = tempNode.cumMile + (value * ((tempNode.cumMile + 10) - tempNode.cumMile)) # dont want to go more then 10 miles 
             tempNode.oor =  tempNode.oor + (value * ((tempNode.oor + 10) - tempNode.oor))
             self.route[i] = tempNode
-      
+            
+    def generateNoiseInValue(self,distortion):
+        for i,tempNode in enumerate(self.route):
+            value =  distortion * random()
+            tempNode.price = tempNode.price + value
+            tempNode.cumMile = tempNode.cumMile + (value * ((tempNode.cumMile + 10) - tempNode.cumMile)) # dont want to go more then 10 miles 
+            tempNode.oor =  tempNode.oor + (value * ((tempNode.oor + 10) - tempNode.oor))
+            self.route[i] = tempNode
+    
+    
     def saveRoute(self):
         with open('Data.csv', mode='r') as csv_file:
             csv_reader = csv.DictReader(csv_file)

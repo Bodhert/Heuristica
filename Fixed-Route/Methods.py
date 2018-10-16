@@ -1,5 +1,6 @@
 # refueling_nodes =[]
 from Vehicle import Vehicle
+import copy
 
 def checkConditions(vehicle,currentNode, nextNode):
     tempVehicle = vehicle
@@ -42,8 +43,8 @@ def List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd):
             if(checkConditions(vehicle, currentNode, nextNode)):
                 refueling_nodes.append(currentNode)
                 advance(vehicle, currentNode, nextNode)
-            else:
-                print("No Solution know :( sorry")
+#             else:
+#                 print("No Solution know :( sorry")
 #     print("constructive algorithm")
 #     print (vehicle.acumulatePrice)
     return refueling_nodes
@@ -51,6 +52,9 @@ def List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd):
 def do_the_route_charging_at_fithyPercent(List_of_charging_points, vehicle):
     for station in List_of_charging_points:
         fuel_at_fithy_percent(station, vehicle)
+        if len(List_of_charging_points) > 0:
+            for i in range(0,len(List_of_charging_points)-1):
+                advance(vehicle, List_of_charging_points[i],List_of_charging_points[i+1])
 
 def fuel_at_fithy_percent(node, vehicle):
     midCharge = vehicle.tankCapacity_Gall - vehicle.minfuelAnyTime_Gall
@@ -58,6 +62,7 @@ def fuel_at_fithy_percent(node, vehicle):
     if to_refuel > 0:
         vehicle.acumulatePrice =  vehicle.acumulatePrice + (to_refuel*node.price)
         vehicle.currentFuel = vehicle.currentFuel + to_refuel
+        
     
 
 def NoiseAndConstruc(data,vehicle, idStart, idEnd):
@@ -92,12 +97,17 @@ def make_move_on_a_neighborhood_adding_more_charging_points(list_inital_neighboh
     return newNeigbor
 
 def NoisyMethod(data,vehicle, idStart, idEnd):
+    originalData = copy.copy(data)
     data.generateNoise()
     Best_Know_solution = List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd)
     best_price = vehicle.acumulatePrice
+    NoiseFactor = 100
     for i in range(0,100):
-        data.generateNoise()
-        temp_solution = List_of_solutions_with_ConstructiveAlgorithm(data,vehicle, idStart, idEnd)
+        vehicle_temp = Vehicle()
+        data = originalData
+        data.generateNoiseInValue(NoiseFactor)
+        NoiseFactor = NoiseFactor-i
+        temp_solution = List_of_solutions_with_ConstructiveAlgorithm(data,vehicle_temp, idStart, idEnd)
         if(vehicle.acumulatePrice < best_price):
             Best_Know_solution = temp_solution
             best_price = vehicle.acumulatePrice 
