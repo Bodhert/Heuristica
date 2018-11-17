@@ -3,26 +3,26 @@ from Node import Node
 from random import random
 
 class Data:
-#     route = [] #shared by all the instances, be careful
+#     routeInfo = [] #shared by all the instances, be careful
     
     def __init__(self):
-        self.route = []
+        self.routeInfo = []
     
     def generateNoise(self):
-        for i,tempNode in enumerate(self.route):
+        for i,tempNode in enumerate(self.routeInfo):
             value = random()
             tempNode.price = tempNode.price + value
             tempNode.cumMile = tempNode.cumMile + (value * ((tempNode.cumMile + 10) - tempNode.cumMile)) # dont want to go more then 10 miles 
             tempNode.oor =  tempNode.oor + (value * ((tempNode.oor + 10) - tempNode.oor))
-            self.route[i] = tempNode
+            self.routeInfo[i] = tempNode
             
     def generateNoiseInValue(self,distortion):
-        for i,tempNode in enumerate(self.route):
+        for i,tempNode in enumerate(self.routeInfo):
             value =  distortion * random()
             tempNode.price = tempNode.price + value
             tempNode.cumMile = tempNode.cumMile + (value * ((tempNode.cumMile + 10) - tempNode.cumMile)) # dont want to go more then 10 miles 
             tempNode.oor =  tempNode.oor + (value * ((tempNode.oor + 10) - tempNode.oor))
-            self.route[i] = tempNode
+            self.routeInfo[i] = tempNode
     
     
     def saveRoute(self):
@@ -35,7 +35,7 @@ class Data:
                 ofRoadMiles = float(row["OOR"])
                 startWindow = float(row["WindowStart"])
                 endWindow = float(row["WindowEnd"])
-                self.route.append(Node(stopId,price,acumulativeMiles,ofRoadMiles,startWindow,endWindow))
+                self.routeInfo.append(Node(stopId,price,acumulativeMiles,ofRoadMiles,startWindow,endWindow))
       
     def printDataFromFile(self):
         with open('Data.csv', mode='r') as csv_file:

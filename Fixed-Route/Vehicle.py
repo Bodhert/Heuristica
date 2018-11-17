@@ -9,4 +9,5 @@ class Vehicle:
         self.requiredFuelAtDest_Gall = 100
         
         self.acumulatePrice = 0
+        self.initialTime = 0
         self.currentFuel = self.initialFuel_Gall
