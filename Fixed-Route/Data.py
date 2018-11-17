@@ -26,14 +26,16 @@ class Data:
     
     
     def saveRoute(self):
-        with open('Data.csv', mode='r') as csv_file:
+        with open('Data2_with_windows.csv', mode='r') as csv_file:
             csv_reader = csv.DictReader(csv_file)
             for row in csv_reader:
                 stopId = int(row["StopID"])
                 price = float(row["Price"])
                 acumulativeMiles = float(row["CumMile"])
                 ofRoadMiles = float(row["OOR"])
-                self.route.append(Node(stopId,price,acumulativeMiles,ofRoadMiles))
+                startWindow = float(row["WindowStart"])
+                endWindow = float(row["WindowEnd"])
+                self.route.append(Node(stopId,price,acumulativeMiles,ofRoadMiles,startWindow,endWindow))
       
     def printDataFromFile(self):
         with open('Data.csv', mode='r') as csv_file:

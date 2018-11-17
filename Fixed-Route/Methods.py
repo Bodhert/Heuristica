@@ -66,7 +66,7 @@ def fuel_at_fithy_percent(node, vehicle):
     
 
 def NoiseAndConstruc(data,vehicle, idStart, idEnd):
-    NoisedData = data
+    NoisedData = copy.copy(data)
     NoisedData.generateNoise()
     print("Noised Algorithm")
     List_of_solutions_with_ConstructiveAlgorithm(NoisedData,vehicle, idStart, idEnd)
