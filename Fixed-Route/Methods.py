@@ -36,18 +36,34 @@ def evaluatePath(data,choices,vehicle):
         current_node = data.routeInfo[node_index]
         next_node = data.routeInfo[node_index+1]
         if isSelectedNode == 1:
-            temp_data = data.routeInfo[node_index]
             #refuel
-            drive(vehicle, current_node, next_node)
+            drive(vehicle, current_node, next_node,data)
         else:
-            drive(vehicle, current_node, next_node)
+            drive(vehicle, current_node, next_node,data)
     
-def drive(vehicle,current_node,next_node):
+    
+def drive(vehicle,current_node,next_node,data):
     miles_ahead = -1
-    if current_node.stopId == 1 or current_node.cumMile ==  next_node.cumMile:
-        miles_ahead = current_node.cumMile
-    else:
+    if current_node.cumMile ==  next_node.cumMile:
+        last_cum_mile = findLastDifferentMile(current_node, data)
+        miles_ahead = current_node.cumMile - last_cum_mile
+    else:    
         miles_ahead = next_node.cumMile - current_node.cumMile
+
+    
     vehicle.currentFuel -= ((miles_ahead ** -1) * (vehicle.milesPerGallon)) ** -1
     vehicle.time += miles_ahead/vehicle.speed_mph
+
+def findLastDifferentMile(current_node, data):
+    last_index = current_node.stopId-1
+    current_cumMiles = current_node.cumMile
+    for i in range (last_index,-1,-1):
+        previous_Mile = data.routeInfo[i].cumMile
+        if current_cumMiles != previous_Mile:
+            return previous_Mile
+    return -1
+    
+
+def refuel(vehicle, current_node):
+    print()
     

@@ -12,6 +12,6 @@ def main():
     
     EvolutiveAlgorithm(data,vehicle)
     
-    
+    print()
     
 if __name__ == "__main__": main()
