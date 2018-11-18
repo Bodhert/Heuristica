@@ -9,7 +9,8 @@ def main():
     vehicle = Vehicle()
     data = Data()
     data.saveRoute()
-    EvolutiveAlgorithm(data)
+    
+    EvolutiveAlgorithm(data,vehicle)
     
     
     
