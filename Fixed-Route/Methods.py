@@ -1,14 +1,24 @@
 from Vehicle import Vehicle
 from Solution import Solution
-from jmespath.ast import current_node
+
 
         
 def EvolutiveAlgorithm(data, vehicle):
+    solutions = []
     NumOfNodes = len(data.routeInfo)
     initial_Solution = Solution(NumOfNodes)
     initial_Solution.randomChoise()
+    
     mutation = initial_Solution.isChargeNode
-    evaluatePath(data,mutation,vehicle);
+    initialPoblation = 100
+    for individual in range(initialPoblation):
+        feasibleIndividual = evaluatePath(data,mutation,vehicle)
+        if(feasibleIndividual):
+            solutions.append(mutation)
+        vehicle = Vehicle()
+        another_Solution = Solution(NumOfNodes)
+        another_Solution.randomChoise()
+        mutation = another_Solution.isChargeNode
     print()
     
 def evaluatePath(data,choices,vehicle):
@@ -24,9 +34,9 @@ def evaluatePath(data,choices,vehicle):
             drive(vehicle, current_node, next_node,data)
         
         if(not isFeasible(vehicle,next_node,len(choices)-1)):
-            print(isFeasible(vehicle,next_node,len(choices)-1))
             print("nojepudo")
-            break
+            return False
+    return True
     
 def isFeasible(vehicle,next_node, size):
     of_route_condition = (vehicle.ofRouteCount <= vehicle.maxOutRoute)
