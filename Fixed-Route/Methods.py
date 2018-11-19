@@ -1,25 +1,48 @@
 from Vehicle import Vehicle
 from Solution import Solution
+import copy
 
 
         
 def EvolutiveAlgorithm(data, vehicle):
-    solutions = []
+    poblation = []
     NumOfNodes = len(data.routeInfo)
-    initial_Solution = Solution(NumOfNodes)
-    initial_Solution.randomChoise()
     
-    mutation = initial_Solution.isChargeNode
     initialPoblation = 100
     for individual in range(initialPoblation):
+        individual_solution = Solution(NumOfNodes)
+        individual_solution.randomChoise()
+        vehicle = Vehicle()
+        mutation = individual_solution.isChargeNode
         feasibleIndividual = evaluatePath(data,mutation,vehicle)
         if(feasibleIndividual):
-            solutions.append(mutation)
-        vehicle = Vehicle()
-        another_Solution = Solution(NumOfNodes)
-        another_Solution.randomChoise()
-        mutation = another_Solution.isChargeNode
+            individual_solution.price = vehicle.acumulatePrice 
+            poblation.append(individual_solution)
+            
+    
+    for individual in poblation:
+        local_search(individual,data)
+    
+    poblation.sort(key=lambda x: x.price, reverse=False)
     print()
+
+def local_search(individual,data):
+    choices =  copy.deepcopy(individual.isChargeNode)
+    size_of_array = len(choices) 
+    for i in range(size_of_array-1):
+        if(choices[i] == 1):
+            if(i > 0 and choices[i-1] == 1):
+                choices[i-1] = 0
+            if(i < size_of_array and choices[i+1] == 1):
+                choices[i+1] = 0
+                
+    vehicle = Vehicle()
+    if(evaluatePath(data, choices, vehicle)):
+        if(vehicle.acumulatePrice < individual.price):
+            individual.isChargeNode = choices
+            individual.price = vehicle.acumulatePrice 
+    
+    
     
 def evaluatePath(data,choices,vehicle):
     for i in range (len(choices)-1):
@@ -34,7 +57,7 @@ def evaluatePath(data,choices,vehicle):
             drive(vehicle, current_node, next_node,data)
         
         if(not isFeasible(vehicle,next_node,len(choices)-1)):
-            print("nojepudo")
+
             return False
     return True
     
