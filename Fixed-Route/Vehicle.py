@@ -10,5 +10,6 @@ class Vehicle:
         
         self.acumulatePrice = 0
         self.time = 0
+        self.ofRouteCount = 0
         self.currentFuel = self.initialFuel_Gall
-        self.speed_mph = 85 #mph
+        self.speed_mph = 115 #mph

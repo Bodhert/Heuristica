@@ -2,24 +2,6 @@ from Vehicle import Vehicle
 from Solution import Solution
 from jmespath.ast import current_node
 
-
-
-
-def isFeasibleRoute(solution):
-    return True
-
-def checkConditions(vehicle,currentNode, nextNode):
-    tempVehicle = vehicle
-    milesTotravel = nextNode.cumMile - currentNode.cumMile 
-    if milesTotravel != 0.0:
-        currentFuel_gal = tempVehicle.currentFuel - ((milesTotravel**-1) *  tempVehicle.milesPerGallon )**-1 # converting unities
-        return currentFuel_gal >= tempVehicle.minfuelAnyTime_Gall
-    return True
-
-def advance(vehicle,currentNode, nextNode):
-    if currentNode.cumMile != nextNode.cumMile: # have to think well this question
-        milesTotravel = nextNode.cumMile - currentNode.cumMile
-        vehicle.currentFuel = vehicle.currentFuel - (((milesTotravel**-1) *  vehicle.milesPerGallon )**-1)
         
 def EvolutiveAlgorithm(data, vehicle):
     NumOfNodes = len(data.routeInfo)
@@ -36,11 +18,25 @@ def evaluatePath(data,choices,vehicle):
         current_node = data.routeInfo[node_index]
         next_node = data.routeInfo[node_index+1]
         if isSelectedNode == 1:
-            #refuel
+            refuel_at_max(vehicle, current_node)
             drive(vehicle, current_node, next_node,data)
         else:
             drive(vehicle, current_node, next_node,data)
+        
+        if(not isFeasible(vehicle,next_node,len(choices)-1)):
+            print(isFeasible(vehicle,next_node,len(choices)-1))
+            print("nojepudo")
+            break
     
+def isFeasible(vehicle,next_node, size):
+    of_route_condition = (vehicle.ofRouteCount <= vehicle.maxOutRoute)
+    minFuelCondition = (vehicle.currentFuel >= vehicle.minfuelAnyTime_Gall)
+    time_aceptance = (vehicle.time <= next_node.endWindow)
+    last_node_criteria = True
+    if(next_node.stopId == size):
+        last_node_criteria = (vehicle.currentFuel >= vehicle.requiredFuelAtDest_Gall)
+        
+    return (of_route_condition and minFuelCondition and time_aceptance and last_node_criteria)
     
 def drive(vehicle,current_node,next_node,data):
     miles_ahead = -1
@@ -49,8 +45,7 @@ def drive(vehicle,current_node,next_node,data):
         miles_ahead = current_node.cumMile - last_cum_mile
     else:    
         miles_ahead = next_node.cumMile - current_node.cumMile
-
-    
+        
     vehicle.currentFuel -= ((miles_ahead ** -1) * (vehicle.milesPerGallon)) ** -1
     vehicle.time += miles_ahead/vehicle.speed_mph
 
@@ -64,6 +59,17 @@ def findLastDifferentMile(current_node, data):
     return -1
     
 
-def refuel(vehicle, current_node):
-    print()
-    
+def refuel_at_max(vehicle, current_node):
+    to_refuel = vehicle.tankCapacity_Gall - vehicle.currentFuel
+    if to_refuel >= vehicle.minRefuelQuantity_Gall:
+        
+        offRoute_miles = current_node.oor
+        if offRoute_miles > 0:
+            vehicle.currentFuel -= ((offRoute_miles ** -1) * (vehicle.milesPerGallon)) ** -1
+            vehicle.ofRouteCount += offRoute_miles
+            
+        to_refuel = vehicle.tankCapacity_Gall - vehicle.currentFuel
+        price = (to_refuel * current_node.price)
+        vehicle.currentFuel += to_refuel
+        vehicle.acumulatePrice += price
+        vehicle.time += offRoute_miles/vehicle.speed_mph
