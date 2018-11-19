@@ -24,8 +24,13 @@ def EvolutiveAlgorithm(data, vehicle):
         local_search(individual,data)
     
     poblation.sort(key=lambda x: x.price, reverse=False)
-    print()
-
+    
+    i = 0
+    for solution in poblation:
+        print(i)
+        print(solution.price)
+        i+=1
+        
 def local_search(individual,data):
     choices =  copy.deepcopy(individual.isChargeNode)
     size_of_array = len(choices) 
